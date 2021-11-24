@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Comment extends Model
 {
+    use HasFactory;
+
     public const TABLE_NAME = 'comments';
     public const FIELD_ID   = 'comment_id';
 
@@ -30,4 +33,6 @@ class Comment extends Model
     {
         return $this->belongsTo(Post::class, Post::FIELD_ID);
     }
+
+
 }
