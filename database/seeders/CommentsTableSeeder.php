@@ -18,7 +18,7 @@ class CommentsTableSeeder extends Seeder
     public function run()
     {
         $arRandomWords = explode(',', strtolower($this->randomWords));
-        $arContent = Helper::generateContents($arRandomWords);
+        $arContent = Helper::generateAllCombinations($arRandomWords);
         $posts = collect(Post::all()->modelKeys());
         $arData = [];
         foreach ($arContent as $content) {
@@ -28,6 +28,7 @@ class CommentsTableSeeder extends Seeder
                 'abbreviation' => Helper::generateAbbreviation($content)
             ]);
         }
+        //Insert the data in one go
         Comment::insert($arData);
 
 //        Comment::factory()->createMany($arData);
