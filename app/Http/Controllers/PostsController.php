@@ -16,8 +16,9 @@ class PostsController extends Controller
     public function show(Request $request): JsonResponse
     {
         $posts = Post::sort($request->input('sort'), $request->input('direction'))
+            ->includeRelation(explode(',', $request->input('with')))
             ->filter($request->input())
-            ->paginate($request->input('limit') ?? Post::DEFAULT_LIMIT);
+            ->paginate((int)$request->input('limit') ?? Post::DEFAULT_LIMIT);
         return response()->json([
             'result' => $posts->toArray()['data'],
             'count' => $posts->total()
@@ -29,11 +30,17 @@ class PostsController extends Controller
      * */
     public function delete(int $id): JsonResponse
     {
-        $post = Post::findOrFail($id);
-        $post->delete();
-        return response()->json(
-            ['Deleted Successfully: deleted_at' => $post->deleted_at],
-            Response::HTTP_OK
-        );
+        try {
+            $post = Post::findOrFail($id);
+            $post->delete();
+            return response()->json(
+                ['Deleted Successfully: deleted_at' => $post->deleted_at],
+                Response::HTTP_OK
+            );
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], Response::HTTP_NOT_FOUND);
+        }
     }
 }

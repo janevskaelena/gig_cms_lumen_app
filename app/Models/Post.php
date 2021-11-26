@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\Filterable;
+use App\Traits\Relational;
 use App\Traits\Sortable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,12 +13,9 @@ use Illuminate\Http\Request;
 
 class Post extends Model
 {
-    use HasFactory, SoftDeletes, Sortable, Filterable;
+    use HasFactory, SoftDeletes, Sortable, Filterable, Relational;
 
-    public const ORDER_ASCENDING = 'asc';
-    public const ORDER_DESCENDING = 'desc';
     public const DEFAULT_LIMIT = 10;
-    public const DEFAULT_PAGE = 1;
 
     public const TABLE_NAME = 'posts';
     public const FIELD_ID   = 'post_id';
@@ -41,7 +39,7 @@ class Post extends Model
       'topic'
     ];
 
-    protected $with = [
+    protected $relationWith = [
         'comments'
     ];
 
@@ -80,12 +78,21 @@ class Post extends Model
     public function rules(Request $request)
     {
         return [
-
+            'post_id' => 'required|int',
+            'topic' => 'string'
         ];
     }
 
     public function comments(): HasMany
     {
         return $this->hasMany(Comment::class, self::FIELD_ID, 'post_id');
+    }
+
+    public static function boot() {
+        parent::boot();
+
+        static::deleting(function(Post $post) {
+            $post->comments()->delete();
+        });
     }
 }

@@ -17,16 +17,15 @@ trait Filterable {
             return $builder;
         }
         $tableName = $this->getTable();
-        $defaultFillableFields = $this->fillable;
         foreach ($filters as $field => $value) {
-            if(in_array($field, $this->equalsFilterFields) && $value != null) {
+            if(in_array($field, $this->equalsFilterFields ?? []) && $value != null) {
                 $builder->where($field, $value);
                 continue;
             }
-            if(!in_array($field, $defaultFillableFields) || !$value) {
+            if(!in_array($field, $this->fillable ?? []) || !$value) {
                 continue;
             }
-            if(in_array($field, $this->likeFilterFields)) {
+            if(in_array($field, $this->likeFilterFields ?? [])) {
                 $builder->where($tableName.'.'.$field, 'LIKE', "%$value%");
             } else if(is_array($value)) {
                 $builder->whereIn($field, $value);

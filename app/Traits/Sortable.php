@@ -15,7 +15,7 @@ trait Sortable
     public function scopeSort($query, mixed $sort, mixed $direction)
     {
         // Get sortable column
-        $sortables = data_get($this, 'sortables', []);
+        $sortables = $this->sortables ?? [];
 
         // Get the direction of which to sort
         $direction = $direction ?? 'asc';
