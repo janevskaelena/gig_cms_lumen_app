@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Adjudicator\Models\Application;
 use Adjudicator\Models\Brand;
+use App\Helpers\Helper;
 use App\Models\Comment;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -49,7 +50,11 @@ class CommentsController extends Controller
     {
         try {
             $comment = Comment::query()->create(
-                $request->only((new Comment())->getFillable())
+                $request
+                    ->merge([
+                        'abbreviation' => Helper::generateAbbreviation(explode(' ', $request->input('content')))
+                    ])
+                    ->only((new Comment())->getFillable())
             );
             return response()->json([
                 'result' => $comment->refresh()->toArray(),
