@@ -15,16 +15,17 @@ class CreateCommentTable extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->increments('comment_id');
-            $table->integer('post_id')->unsigned();
-            $table->string('content');
-            $table->string('abbreviation')->unique('comment_abbreviation_unq_inx');
+            $table->integer('post_id')->unsigned()->nullable(false);
+            $table->string('content')->nullable(false);
+            $table->string('abbreviation')->unique('comment_abbreviation_unq_inx')->nullable(false);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
             $table->engine = 'InnoDB';
 
             $table->foreign('post_id')
                 ->references('post_id')
-                ->on('posts');
+                ->on('posts')
+                ->onUpdate('cascade');
 
             $table->softDeletes();
         });

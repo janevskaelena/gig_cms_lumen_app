@@ -15,7 +15,7 @@ class CreatePostTable extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->increments('post_id');
-            $table->string('topic')->unique('post_topic_unq_inx');
+            $table->string('topic')->unique('post_topic_unq_inx')->nullable(false);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
             $table->engine = 'InnoDB';

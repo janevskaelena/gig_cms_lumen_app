@@ -29,6 +29,9 @@ class Helper
      * Generate string that is composed of the first letters of all the array elements given
      */
     public static function generateAbbreviation (array $arWords): string {
+        if(empty($arWords)){
+            throw new \Exception('Empty array not allowed');
+        }
         $abbreviation = '';
         foreach ($arWords as $word) {
             $abbreviation .= strtolower(substr($word, 0, 1));

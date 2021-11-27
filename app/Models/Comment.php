@@ -75,7 +75,7 @@ class Comment extends Model
     {
         return [
             'post_id' => 'required|int',
-            'content' => 'string'
+            'content' => 'required|string'
         ];
     }
 

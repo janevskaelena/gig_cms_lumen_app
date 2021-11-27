@@ -78,8 +78,7 @@ class Post extends Model
     public function rules(Request $request)
     {
         return [
-            'post_id' => 'required|int',
-            'topic' => 'string'
+            'topic' => 'required|string'
         ];
     }
 
