@@ -9,7 +9,7 @@ class PostsTest extends TestCase
 
 
     /**
-     *
+     * test get posts endpoint
      */
     public function testGetPosts()
     {
@@ -18,7 +18,7 @@ class PostsTest extends TestCase
     }
 
     /**
-     *
+     * test delete posts endpoint
      */
     public function testDeletePosts()
     {

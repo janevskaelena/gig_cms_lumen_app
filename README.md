@@ -65,7 +65,10 @@ curl --location --request DELETE 'http://0.0.0.0:8000/api/posts/2' --header 'Aut
 
 ## Crete comment
 
-curl --location --request POST 'http://0.0.0.0:8000/api/comments?post_id=1&content=Alfa Beta Gama Delta' --header 'Authorization: secretToken'
+curl --location --request POST 'http://0.0.0.0:8000/api/comments' \
+--header 'Authorization: secretToken' \
+--form 'post_id="1"' \
+--form 'content="Alfa Beta Gama Delta Terca Deva Da dfdf  555 89 safas ff"'
 
 
 

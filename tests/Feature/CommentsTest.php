@@ -9,7 +9,7 @@ class CommentsTest extends TestCase
     use DatabaseTransactions;
 
     /**
-     *
+     * test create comments endpoint
      */
     public function testCreateComments()
     {
@@ -26,8 +26,7 @@ class CommentsTest extends TestCase
                 "abbreviation": "ycdi!"
             }
         }
-        ', $comment->comment_id ?? 0);
-
+        ', $comment->comment_id);
         $response->seeJsonEquals(json_decode($jsonResponse, true));
 
         //create new comment with same content
@@ -58,16 +57,32 @@ class CommentsTest extends TestCase
     }
 
     /**
-     *
+     * test get comments endpoint
      */
     public function testGetComments()
     {
-        $this->get('/api/comments?post_id=1&limit=20&page=1&content=nice&abbreviation=na&sort=abbreviation&direction=desc');
+        $this->post('/api/comments', ['post_id' => '1', 'content' => 'Data Type Abstract Dear Drum'], ['HTTP_AUTHORIZATION' => env('GIG_AUTH_TOKEN')]);
+        $comment = Comment::query()->select('comment_id')->orderBy('comment_id', 'desc')->first();
+        $response = $this->get('/api/comments?post_id=1&limit=1&page=1&content=Data&abbreviation=dt&sort=comment_id&direction=desc');
+        $jsonResponse = sprintf('
+        {
+            "result": [
+                {
+                    "comment_id": %s,
+                    "post_id": 1,
+                    "content": "Data Type Abstract Dear Drum",
+                    "abbreviation": "dtadd"
+                }
+            ],
+            "count": 1
+        }
+        ', $comment->comment_id);
         $this->assertResponseOk();
+        $response->seeJsonEquals(json_decode($jsonResponse, true));
     }
 
     /**
-     *
+     * Test delete comments endpoint
      */
     public function testDeleteComments()
     {
