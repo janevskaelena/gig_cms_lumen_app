@@ -76,11 +76,9 @@ $app->configure('app');
 //     App\Http\Middleware\ExampleMiddleware::class
 // ]);
 
-// $app->routeMiddleware([
-//     'auth' => App\Http\Middleware\Authenticate::class,
-// ]);
-
  $app->routeMiddleware([
+//     'auth' => App\Http\Middleware\Authenticate::class,
+     'authAppToken' => App\Http\Middleware\AuthenticateAppToken::class,
      'validator' => App\Http\Middleware\InputValidator::class,
  ]);
 

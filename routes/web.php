@@ -20,13 +20,11 @@ $router->get('/', function () use ($router) {
 $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('posts',  ['uses' => 'PostsController@show']);
     $router->delete('posts/{id}', ['uses' => 'PostsController@delete']);
-});
-
-$router->group(['prefix' => 'api', 'middleware' => 'validator:App\Models\Comment'], function () use ($router) {
-    $router->post('comments', ['uses' => 'CommentsController@create']);
-});
-
-$router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('comments', ['uses' => 'CommentsController@show']);
     $router->delete('comments/{id}', ['uses' => 'CommentsController@delete']);
 });
+
+$router->group(['prefix' => 'api', 'middleware' => ['validator:App\Models\Comment', 'authAppToken']], function () use ($router) {
+    $router->post('comments', ['uses' => 'CommentsController@create']);
+});
+
