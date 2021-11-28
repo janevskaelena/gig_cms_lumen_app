@@ -68,7 +68,12 @@ class CommentsController extends Controller
     public function create(Request $request): JsonResponse
     {
         try {
-            Post::findOrFail($request->input('post_id'));
+            $post = Post::find($request->input('post_id'));
+            if(!$post) {
+                return response()->json([
+                    'error' => 'Post with id: '.$request->input('post_id'). ' does not exist'
+                ], Response::HTTP_UNPROCESSABLE_ENTITY);
+            }
             $comment = Comment::query()->create(
                 $request
                     ->merge([
