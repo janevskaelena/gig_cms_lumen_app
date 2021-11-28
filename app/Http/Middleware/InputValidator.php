@@ -4,11 +4,12 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 class InputValidator
 {
     /**
-     * Handle an incoming request.
+     * Handle an incoming request validation.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
@@ -21,15 +22,13 @@ class InputValidator
         $validator = app('validator')->make($request->input(), $model->rules($request));
 
         if ($validator->fails()) {
-
-            return $this->response($validator->errors());
+            return new JsonResponse([
+                'error' => $validator->errors()
+            ],
+                Response::HTTP_UNPROCESSABLE_ENTITY
+            );
         }
 
         return $next($request);
-    }
-
-    protected function response($errors)
-    {
-        return new JsonResponse($errors, 422);
     }
 }

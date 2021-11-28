@@ -7,6 +7,14 @@ use Illuminate\Http\Response;
 
 class AuthenticateAppToken
 {
+    /**
+     * Handle an incoming request fixed token authentication
+     *
+     * @param $request
+     * @param Closure $next
+     * @param null $guard
+     * @return mixed
+     */
     public function handle($request, Closure $next, $guard = null)
     {
         try {

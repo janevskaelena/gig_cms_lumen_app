@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 class CreatePostTable extends Migration
 {
     /**
-     * Run the migrations.
+     * Run the migrations crete new table posts.
      *
      * @return void
      */

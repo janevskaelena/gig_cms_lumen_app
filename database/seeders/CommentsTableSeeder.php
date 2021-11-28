@@ -9,7 +9,12 @@ use Illuminate\Database\Seeder;
 
 class CommentsTableSeeder extends Seeder
 {
+    /**
+     * Predefined variable for seeding the database
+     * @var string
+     */
     private $randomWords = 'Cool,Strange,Funny,Laughing,Nice,Awesome,Great,Horrible,Beautiful,PHP,Vegeta,Italy,Joost';
+
     /**
      * Run the database seeds.
      *
@@ -17,8 +22,11 @@ class CommentsTableSeeder extends Seeder
      */
     public function run()
     {
+        //make an array
         $arRandomWords = explode(',', strtolower($this->randomWords));
+        //get all the combinations
         $arContent = Helper::generateAllCombinations($arRandomWords);
+        //get the post ids
         $posts = collect(Post::all()->modelKeys());
         $arData = [];
         foreach ($arContent as $content) {

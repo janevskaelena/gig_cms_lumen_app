@@ -10,9 +10,13 @@ use Illuminate\Http\Response;
 class PostsController extends Controller
 {
 
-    /*
+
+    /**
+     * Get all posts
      *
-     * */
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function show(Request $request): JsonResponse
     {
         $posts = Post::sort($request->input('sort'), $request->input('direction'))
@@ -22,25 +26,33 @@ class PostsController extends Controller
         return response()->json([
             'result' => $posts->toArray()['data'],
             'count' => $posts->total()
-        ]);
+        ],
+            Response::HTTP_OK
+        );
     }
 
-    /*
+    /**
+     * Delete post by id
      *
-     * */
+     * @param int $id
+     * @return JsonResponse
+     */
     public function delete(int $id): JsonResponse
     {
         try {
             $post = Post::findOrFail($id);
             $post->delete();
-            return response()->json(
-                ['Deleted Successfully: deleted_at' => $post->deleted_at],
+            return response()->json([
+                'result' => true
+            ],
                 Response::HTTP_OK
             );
         } catch (\Exception $e) {
             return response()->json([
-                'message' => $e->getMessage(),
-            ], Response::HTTP_NOT_FOUND);
+                'error' => $e->getMessage(),
+            ],
+                Response::HTTP_NOT_FOUND
+            );
         }
     }
 }

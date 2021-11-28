@@ -22,12 +22,20 @@ class Comment extends Model
     protected $primaryKey = self::FIELD_ID;
     protected $table      = self::TABLE_NAME;
 
+    /**
+     * set fillable fields
+     * @var string[]
+     */
     protected $fillable = [
         'post_id',
         'content',
-        'abbreviation',
+        'abbreviation'
     ];
 
+    /**
+     * set visible fields
+     * @var string[]
+     */
     protected $visible = [
         'comment_id',
         'post_id',
@@ -37,7 +45,7 @@ class Comment extends Model
 
     /**
      * set fields for sorting
-     * @var array
+     * @var string[]
      */
     protected $sortables = [
         'comment_id',
@@ -50,7 +58,7 @@ class Comment extends Model
 
     /**
      * set string fields for filtering
-     * @var array
+     * @var string[]
      */
     protected $likeFilterFields = [
         'content',
@@ -58,27 +66,32 @@ class Comment extends Model
     ];
 
     /**
-     * set boolean fields for filtering
-     * @var array
+     * set equals fields for filtering
+     * @var string[]
      */
     protected $equalsFilterFields = [
         'post_id',
         'comment_id'
     ];
 
+
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @param Request $request
+     * @return string[]
      */
-    public function rules(Request $request)
+    public function rules(Request $request): array
     {
         return [
-            'post_id' => 'required|int',
-            'content' => 'required|string'
+            'post_id' => 'required|int|exists:posts,post_id',
+            'content' => 'required|string|min:1'
         ];
     }
 
+    /**
+     * @return BelongsTo
+     */
     public function post(): BelongsTo
     {
         return $this->belongsTo(Post::class, Post::FIELD_ID, 'comment_id');

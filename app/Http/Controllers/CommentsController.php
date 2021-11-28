@@ -13,9 +13,13 @@ use Illuminate\Http\Response;
 class CommentsController extends Controller
 {
 
-    /*
+
+    /**
+     * Get all comments
      *
-     * */
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function show(Request $request): JsonResponse
     {
         $comments = Comment::sort($request->input('sort'), $request->input('direction'))
@@ -24,28 +28,42 @@ class CommentsController extends Controller
         return response()->json([
             'result' => $comments->toArray()['data'],
             'count' => $comments->total()
-        ]);
+        ],
+            Response::HTTP_OK
+        );
     }
 
-    /*
+    /**
+     * Delete comment by id
      *
-     * */
+     * @param int $id
+     * @return JsonResponse
+     */
     public function delete(int $id): JsonResponse
     {
         try {
             $comment = Comment::findOrFail($id);
             $comment->delete();
-            return response()->json(
-                ['Deleted Successfully: deleted_at' => $comment->deleted_at],
+            return response()->json([
+                'result' => true
+            ],
                 Response::HTTP_OK
             );
         } catch (\Exception $e) {
             return response()->json([
-                'message' => $e->getMessage(),
-            ], Response::HTTP_NOT_FOUND);
+                'error' => $e->getMessage(),
+            ],
+                Response::HTTP_NOT_FOUND
+            );
         }
     }
 
+    /**
+     * Crete new comment
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function create(Request $request): JsonResponse
     {
         try {
@@ -57,12 +75,14 @@ class CommentsController extends Controller
                     ->only((new Comment())->getFillable())
             );
             return response()->json([
-                'result' => $comment->refresh()->toArray(),
+                'result' => $comment->refresh()->toArray()
             ], Response::HTTP_CREATED);
         } catch (\Exception $e) {
             return response()->json([
-                'message' => $e->getMessage(),
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+                'error' => $e->getMessage(),
+            ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
     }
 }

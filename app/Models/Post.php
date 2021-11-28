@@ -25,6 +25,7 @@ class Post extends Model
 
     /**
      * set visible fields
+     * @var string[]
      */
     protected $visible = [
         'post_id',
@@ -34,18 +35,23 @@ class Post extends Model
 
     /**
      * set fillable fields
+     * @var string[]
      */
     protected $fillable = [
       'topic'
     ];
 
+    /**
+     * set relationship with fields
+     * @var string[]
+     */
     protected $relationWith = [
         'comments'
     ];
 
     /**
      * set fields for sorting
-     * @var array
+     * @var string[]
      */
     protected $sortables = [
         'post_id',
@@ -56,15 +62,15 @@ class Post extends Model
 
     /**
      * set string fields for filtering
-     * @var array
+     * @var string[]
      */
     protected $likeFilterFields = [
         'topic'
     ];
 
     /**
-     * set boolean fields for filtering
-     * @var array
+     * set equals fields for filtering
+     * @var string[]
      */
     protected $equalsFilterFields = [
         'post_id'
@@ -73,20 +79,28 @@ class Post extends Model
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return string[]
      */
     public function rules(Request $request)
     {
         return [
-            'topic' => 'required|string'
+            'topic' => 'required|string|min:1'
         ];
     }
 
+    /**
+     * @return HasMany
+     */
     public function comments(): HasMany
     {
         return $this->hasMany(Comment::class, self::FIELD_ID, 'post_id');
     }
 
+    /**
+     *
+     * event listener on deleting post
+     *
+     */
     public static function boot() {
         parent::boot();
 
