@@ -27,6 +27,9 @@ class Helper
      * @return array
      */
     public static function generateCombinations(array $arElements, int $subsetSize): array {
+        if($subsetSize <= 0 || count($arElements) < $subsetSize) {
+            throw new \Exception('Subset size not allowed not allowed');
+        }
         /* @var \Math_Combinatorics $combinatorics */
         $combinatorics = new \Math_Combinatorics();
         return $combinatorics->combinations($arElements, $subsetSize);
@@ -36,16 +39,17 @@ class Helper
      * Generate string that is composed of the first letters of all the array elements given
      *
      * @param array $arWords
+     * @param bool $lowerCase
      * @return string
      * @throws \Exception
      */
-    public static function generateAbbreviation (array $arWords): string {
+    public static function generateAbbreviation (array $arWords, bool $lowerCase = true): string {
         if(empty($arWords)){
             throw new \Exception('Empty array not allowed');
         }
         $abbreviation = '';
         foreach ($arWords as $word) {
-            $abbreviation .= strtolower(substr($word, 0, 1));
+            $abbreviation .= $lowerCase ? strtolower(substr($word, 0, 1)) : substr($word, 0, 1);
         }
         return $abbreviation;
     }

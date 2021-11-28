@@ -6,6 +6,7 @@ use Adjudicator\Models\Application;
 use Adjudicator\Models\Brand;
 use App\Helpers\Helper;
 use App\Models\Comment;
+use App\Models\Post;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -67,6 +68,7 @@ class CommentsController extends Controller
     public function create(Request $request): JsonResponse
     {
         try {
+            Post::findOrFail($request->input('post_id'));
             $comment = Comment::query()->create(
                 $request
                     ->merge([

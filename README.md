@@ -33,9 +33,17 @@ docker stop
 
 docker exec -it gig_cms_lumen_app_lumen_1 sh
 
+#### Crete database
+
 php artisan migrate
 
+#### seed the database
+
 php artisan db:seed
+
+#### Run tests
+
+./vendor/phpunit/phpunit/phpunit
 
 ## Example Endpoints
 
